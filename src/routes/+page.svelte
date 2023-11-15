@@ -1,8 +1,17 @@
 <script lang="ts">
-    let gridButtons: number[] = [];
+    class Button {
+        buttonNum: number;
+        buttonClicked: boolean;
+        constructor(num: number, clicked: boolean){
+            this.buttonNum=num;
+            this.buttonClicked=clicked;
+        }
+        
+    }
+    let gridButtons: Button[] = [];
 
     for (let i = 0; i < 64; i++) {
-        gridButtons[i] = i;
+        gridButtons[i] = new Button(i, false);
     }
 
     let bombClicked = false;
@@ -25,13 +34,17 @@
     console.log(bombNumbers);
 
     let disabledButtons: number[] = [];
-
-    function handleClick(num: number) {
-        if (bombNumbers.includes(num)) {
+    
+    function handleClick(button: Button) {
+        button.buttonClicked=true;
+        bombClicked=false;
+        if (bombNumbers.includes(button.buttonNum)) {
             bombClicked = true;
-            disabledButtons = bombNumbers.slice(); // Disable all bomb buttons
+            disabledButtons = bombNumbers.slice();
         }
     }
+    
+    
 </script>
 
 <div class="flex justify-center align-items: center">
@@ -41,15 +54,23 @@
                 <button
                     class="text-blue-600 bg-orange-500 w-16 h-16"
                     on:click={() => handleClick(num)}  
-                    disabled={disabledButtons.includes(num)}
+                    disabled={disabledButtons.includes(num.buttonNum)}
                 >
                 </button>
             {:else}
-                <button
-                    class="text-blue-600 bg-orange-500 w-16 h-16 focus:bg-blue-400 visited:bg-blue-300"
-                    on:click={() => handleClick(num)}
-                >
-                </button>
+                {#if num.buttonClicked == true}
+                    <button
+                        class="text-blue-600 bg-slate-900 w-16 h-16 focus:bg-blue-400"
+                        on:click={() => handleClick(num)}
+                    >
+                    </button>
+                {:else}
+                    <button
+                        class="text-blue-600 bg-orange-500 w-16 h-16 focus:bg-blue-400"
+                        on:click={() => handleClick(num)}
+                    >
+                    </button>
+                {/if}
             {/if}
         {/each}
     </div>
@@ -70,7 +91,8 @@
         align-items: center;
         color: white;
         font-size: 1.5rem;
-        z-index: 999; /* Ensure it's on top of everything */
+        z-index: 999;
     }
 
 </style>
+//let num = new B(num);
