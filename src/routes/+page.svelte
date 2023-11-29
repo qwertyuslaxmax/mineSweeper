@@ -2,16 +2,17 @@
     class Button {
         buttonNum: number;
         buttonClicked: boolean;
-        constructor(num: number, clicked: boolean){
+
+        constructor(num: number){
             this.buttonNum=num;
-            this.buttonClicked=clicked;
+            this.buttonClicked=false;
         }
         
     }
     let gridButtons: Button[] = [];
 
     for (let i = 0; i < 64; i++) {
-        gridButtons[i] = new Button(i, false);
+        gridButtons[i] = new Button(i);
     }
 
     let bombClicked = false;
@@ -42,42 +43,47 @@
             bombClicked = true;
             disabledButtons = bombNumbers.slice();
         }
-    }
-    
-    
+    }    
 </script>
 
 <div class="flex justify-center align-items: center">
     <div class="grid grid-cols-8 gap-2 w-fit">
         {#each gridButtons as num}
             {#if bombClicked}
-                <button
-                    class="text-blue-600 bg-orange-500 w-16 h-16"
-                    on:click={() => handleClick(num)}  
-                    disabled={disabledButtons.includes(num.buttonNum)}
-                >
-                </button>
-            {:else}
                 {#if num.buttonClicked == true}
-                    <button
-                        class="text-blue-600 bg-slate-900 w-16 h-16 focus:bg-blue-400"
-                        on:click={() => handleClick(num)}
-                    >
-                    </button>
+                <button
+                class="text-blue-600 bg-slate-900 w-16 h-16 focus:bg-blue-400"
+                on:click={() => handleClick(num)}
+                disabled={disabledButtons.includes(num.buttonNum)}
+            > a </button>
                 {:else}
                     <button
                         class="text-blue-600 bg-orange-500 w-16 h-16 focus:bg-blue-400"
                         on:click={() => handleClick(num)}
-                    >
-                    </button>
+                        disabled={disabledButtons.includes(num.buttonNum)}
+                    > b </button>
+                {/if}
+            {:else if !bombClicked}
+                {#if num.buttonClicked == true}
+                    <button
+                        class="text-blue-600 bg-slate-900 w-16 h-16 focus:bg-blue-400"
+                        on:click={() => handleClick(num)}
+                    > c </button>
+                {:else}
+                    <button
+                        class="text-blue-600 bg-orange-500 w-16 h-16 focus:bg-blue-400"
+                        on:click={() => handleClick(num)}
+                    > d </button>
                 {/if}
             {/if}
         {/each}
     </div>
 </div>
+
 {#if bombClicked}
-        <p class="message-overlay">You Lost</p>
-    {/if}
+    <p class="message-overlay">You Lost</p>
+{/if}
+
 <style>
     .message-overlay {
         position: fixed;
@@ -95,4 +101,4 @@
     }
 
 </style>
-//let num = new B(num);
+<!-- //let num = new B(num); -->
