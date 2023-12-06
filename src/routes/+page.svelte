@@ -35,46 +35,63 @@
     console.log(bombNumbers);
 
     let disabledButtons: number[] = [];
-    
+    function leftSide() {
+
+    } 
+    function Top() {
+
+    }
+
     function handleClick(button: Button) {
-        button.buttonClicked=true;
-        bombClicked=false;
+        gridButtons[button.buttonNum].buttonClicked = true;
         if (bombNumbers.includes(button.buttonNum)) {
             bombClicked = true;
             disabledButtons = bombNumbers.slice();
         }
+        switch (button.buttonNum) {
+            case 16:
+            case 8:
+            case 24:
+            case 32:
+            case 40:
+            case 48:
+
+                leftSide()
+                break;
+            
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+
+                Top()
+                break;
+                
+            default:
+                break;
+        }
     }    
 </script>
+<h1>​</h1>
+<h1>​</h1>
+<h1>​</h1>
+<h1>​</h1>
 
 <div class="flex justify-center align-items: center">
     <div class="grid grid-cols-8 gap-2 w-fit">
         {#each gridButtons as num}
-            {#if bombClicked}
-                {#if num.buttonClicked == true}
-                <button
-                class="text-blue-600 bg-slate-900 w-16 h-16 focus:bg-blue-400"
-                on:click={() => handleClick(num)}
-                disabled={disabledButtons.includes(num.buttonNum)}
-            > a </button>
-                {:else}
-                    <button
-                        class="text-blue-600 bg-orange-500 w-16 h-16 focus:bg-blue-400"
-                        on:click={() => handleClick(num)}
-                        disabled={disabledButtons.includes(num.buttonNum)}
-                    > b </button>
-                {/if}
-            {:else if !bombClicked}
-                {#if num.buttonClicked == true}
-                    <button
-                        class="text-blue-600 bg-slate-900 w-16 h-16 focus:bg-blue-400"
-                        on:click={() => handleClick(num)}
-                    > c </button>
-                {:else}
-                    <button
-                        class="text-blue-600 bg-orange-500 w-16 h-16 focus:bg-blue-400"
-                        on:click={() => handleClick(num)}
-                    > d </button>
-                {/if}
+            {#if num.buttonClicked}
+                <button class="bg-slate-900 text-blue-600 w-16 h-16"
+                    on:click={() => handleClick(num)}> 
+                    {num.buttonClicked}
+                </button>
+            {:else}
+                <button class="bg-orange-500 text-red-600 w-16 h-16"
+                    on:click={() => handleClick(num)}> 
+                    {num.buttonClicked}
+                </button>
             {/if}
         {/each}
     </div>
@@ -99,6 +116,5 @@
         font-size: 1.5rem;
         z-index: 999;
     }
-
 </style>
 <!-- //let num = new B(num); -->
