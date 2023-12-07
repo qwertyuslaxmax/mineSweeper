@@ -1,11 +1,14 @@
 <script lang="ts">
+    
     class Button {
         buttonNum: number;
         buttonClicked: boolean;
+        borderBombs: number;
 
         constructor(num: number){
             this.buttonNum=num;
             this.buttonClicked=false;
+            this.borderBombs=0;
         }
         
     }
@@ -16,6 +19,7 @@
     }
 
     let bombClicked = false;
+    let gameWon = false;
 
     function getRandomNumbers() {
         let randomNumbers: number[] = [];
@@ -35,12 +39,7 @@
     console.log(bombNumbers);
 
     let disabledButtons: number[] = [];
-    function leftSide() {
-
-    } 
-    function Top() {
-
-    }
+    
 
     function handleClick(button: Button) {
         gridButtons[button.buttonNum].buttonClicked = true;
@@ -56,7 +55,21 @@
             case 40:
             case 48:
 
-                leftSide()
+                if(bombNumbers.includes(button.buttonNum+1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+9)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-7)){
+                    button.borderBombs = button.borderBombs + 1
+                }
                 break;
             
             case 1:
@@ -66,13 +79,151 @@
             case 5:
             case 6:
 
-                Top()
+                if(bombNumbers.includes(button.buttonNum-1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+9)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+7)){
+                    button.borderBombs = button.borderBombs + 1
+                }
                 break;
                 
+            case 57:
+            case 58:
+            case 59:
+            case 60:
+            case 61:
+            case 62:
+
+                if(bombNumbers.includes(button.buttonNum-1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-9)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-7)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                break;
+
+            case 15:
+            case 23:
+            case 31:
+            case 39:
+            case 47:
+            case 55:
+
+                if(bombNumbers.includes(button.buttonNum-1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-9)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+7)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                break;
+
+            case 0:
+
+                if(bombNumbers.includes(1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(9)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                break;
+            case 7:
+
+                if(bombNumbers.includes(6)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(15)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(14)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                break;
+
+            case 56:
+                
+                if(bombNumbers.includes(49)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(48)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(57)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                break;
+
+            case 63:
+
+                if(bombNumbers.includes(62)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(54)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(55)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                break;
+
             default:
+                if(bombNumbers.includes(button.buttonNum-1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+1)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+8)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-9)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+9)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum-7)){
+                    button.borderBombs = button.borderBombs + 1
+                }
+                if(bombNumbers.includes(button.buttonNum+7)){
+                    button.borderBombs = button.borderBombs + 1
+                }
                 break;
         }
-    }    
+    }
+        
 </script>
 <h1>​</h1>
 <h1>​</h1>
@@ -85,12 +236,11 @@
             {#if num.buttonClicked}
                 <button class="bg-slate-900 text-blue-600 w-16 h-16"
                     on:click={() => handleClick(num)}> 
-                    {num.buttonClicked}
+                    {num.borderBombs}
                 </button>
             {:else}
                 <button class="bg-orange-500 text-red-600 w-16 h-16"
                     on:click={() => handleClick(num)}> 
-                    {num.buttonClicked}
                 </button>
             {/if}
         {/each}
