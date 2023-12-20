@@ -37,7 +37,6 @@
     }
 
     let bombNumbers = getRandomNumbers();
-    console.log(bombNumbers);
 
     let disabledButtons: number[] = [];
 
@@ -265,6 +264,11 @@
     <p class="message-overlayWin">You Won</p>
 {/if}
 
+<h1>​</h1>
+<h1>​</h1>
+<h1>​</h1>
+<h1>​</h1>
+
 <style>
     .message-overlay {
         position: fixed;
@@ -296,4 +300,3 @@
         z-index: 999;
     }
 </style>
-
