@@ -248,7 +248,7 @@
                     {num.borderBombs}
                 </button>
             {:else}
-                <button class="bg-orange-500 text-red-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"
                     on:click={() => handleClick(num)}> 
                 </button>
             {/if}
