@@ -232,8 +232,19 @@
             }
         }
     }
-        
+    
+    function replay() {
+        for(let i: number = 0; i < gridButtons.length; i++) {
+            gridButtons[i] = new Button(i);
+            bombNumbers = getRandomNumbers();
+            disabledButtons = [];
+            bombClicked = false;
+            buttonsClicked = 0;
+            gameWon = false;
+        }
+    }
 </script>
+
 <h1>​</h1>
 <h1>​</h1>
 <h1>​</h1>
@@ -242,7 +253,19 @@
 <div class="flex justify-center align-items: center">
     <div class="grid grid-cols-8 gap-2 w-fit">
         {#each gridButtons as num}
-            {#if num.buttonClicked}
+            {#if bombClicked || gameWon}
+                {#if bombNumbers.includes(num.buttonNum) || num.buttonNum == bombNumbers[num.buttonNum]}
+                    <button class="bg-red-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 💣 </button>
+                {:else if num.buttonClicked}
+                    <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                        on:click={() => handleClick(num)}> 
+                        {num.borderBombs}
+                    </button>
+                {:else}
+                    <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 
+                    </button>
+                {/if}
+            {:else if num.buttonClicked}
                 <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
                     on:click={() => handleClick(num)}> 
                     {num.borderBombs}
@@ -258,10 +281,12 @@
 
 {#if bombClicked}
     <p class="message-overlay">You Lost</p>
+    <button class="messageButton" on:click={replay}>Replay</button>
 {/if}
 
 {#if gameWon}
     <p class="message-overlayWin">You Won</p>
+    <button class="messageButton" on:click={replay}>Replay</button>
 {/if}
 
 <h1>​</h1>
@@ -282,7 +307,7 @@
         align-items: center;
         color: white;
         font-size: 3rem;
-        z-index: 999;
+        z-index: 998;
     }
     .message-overlayWin {
         opacity: 0.6;
@@ -297,6 +322,20 @@
         align-items: center;
         color: darkorange;
         font-size: 3rem;
+        z-index: 998;
+    }
+    .messageButton {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 25%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
         z-index: 999;
     }
 </style>
