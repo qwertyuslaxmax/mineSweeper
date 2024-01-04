@@ -1,5 +1,39 @@
 <script lang="ts">
     
+    let mode: number;
+    let gameBegin: boolean = true;
+
+    function cakeWalk(){
+        mode=5;
+        gameBegin = false;
+        bombNumbers=getRandomNumbers();
+        replay();
+    }
+    function easy(){
+        mode=8;
+        gameBegin = false;
+        bombNumbers=getRandomNumbers();
+        replay();
+    }
+    function normal(){
+        mode=12;
+        gameBegin = false;
+        bombNumbers=getRandomNumbers();
+        replay();
+    }
+    function hard(){
+        mode=18;
+        gameBegin = false;
+        bombNumbers=getRandomNumbers();
+        replay();
+    }
+    function veryHard(){
+        mode=25;
+        gameBegin = false;
+        bombNumbers=getRandomNumbers();
+        replay();
+    }
+    
     class Button {
         buttonNum: number;
         buttonClicked: boolean;
@@ -25,7 +59,7 @@
     function getRandomNumbers() {
         let randomNumbers: number[] = [];
 
-        while (randomNumbers.length < 12) {
+        while (randomNumbers.length < mode) {
             let randomNumber = Math.floor(Math.random() * 64);
 
             if (!randomNumbers.includes(randomNumber)) {
@@ -37,7 +71,7 @@
     }
 
     let bombNumbers = getRandomNumbers();
-
+    
     let disabledButtons: number[] = [];
 
     function handleClick(button: Button) {
@@ -51,7 +85,7 @@
                     throw "exit";
                 }
                 buttonsClicked++
-                if(buttonsClicked == 52){
+                if(buttonsClicked == 64-mode){
                     gameWon = true;
                 }
                 disabledButtons.push(button.buttonNum);
@@ -281,12 +315,20 @@
 
 {#if bombClicked}
     <p class="message-overlay">You Lost</p>
-    <button class="messageButton" on:click={replay}>Replay</button>
+    <button class="messageButton" on:click={replay}>Retry</button>
 {/if}
 
 {#if gameWon}
     <p class="message-overlayWin">You Won</p>
     <button class="messageButton" on:click={replay}>Replay</button>
+{/if}
+
+{#if gameBegin}
+    <button class="moretop" on:click={cakeWalk}>Cakewalk</button>
+    <button class="top" on:click={easy}>Easy</button>
+    <button class="upMid" on:click={normal}>Normal</button>
+    <button class="downMid" on:click={hard}>Hard</button>
+    <button class="bottom" on:click={veryHard}>Very Hard</button>
 {/if}
 
 <h1>​</h1>
@@ -332,6 +374,81 @@
         height: 25%;
         background: rgba(0, 0, 0, 0.7);
         display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+        z-index: 999;
+    }
+    .moretop {
+        opacity: 0.94;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 20%;
+        background: aliceblue;
+        display: block;
+        justify-content: center;
+        align-items: center;
+        color: blue;
+        font-size: 1.5rem;
+        z-index: 999;
+    }
+    .top {
+        opacity: 0.94;
+        position: fixed;
+        top: 20%;
+        left: 0;
+        width: 100%;
+        height: 25%;
+        background: greenyellow;
+        display: block;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+        z-index: 999;
+    }
+    .upMid {
+        opacity: 0.94;
+        position: fixed;
+        top: 40%;
+        left: 0;
+        width: 100%;
+        height: 20%;
+        background: darkblue;
+        display: block;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+        z-index: 999;
+    }
+    .downMid {
+        position: fixed;
+        top: 60%;
+        opacity: 0.94;
+        left: 0;
+        width: 100%;
+        height: 20%;
+        background: darkred;
+        display: block;
+        justify-content: center;
+        align-items: center;
+        color: darkviolet;
+        font-size: 1.5rem;
+        z-index: 999;
+    }
+    .bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0.94;
+        height: 20%;
+        background: black;
+        display: block;
         justify-content: center;
         align-items: center;
         color: white;
