@@ -70,6 +70,15 @@
         return randomNumbers;
     }
 
+    let root = document.querySelector(":root");
+    let button = document.querySelector("button");
+
+    button.addEventListener('click', () => {
+      event.preventDefault();
+      root.classList.toggle('dark');
+    })
+
+
     let bombNumbers = getRandomNumbers();
     
     let disabledButtons: number[] = [];
@@ -284,34 +293,38 @@
 <h1>​</h1>
 <h1>​</h1>
 
-<div class="flex justify-center align-items: center">
+<div class="flex justify-center align-items: center white-custom">
     <div class="grid grid-cols-8 gap-2 w-fit">
         {#each gridButtons as num}
             {#if bombClicked || gameWon}
                 {#if bombNumbers.includes(num.buttonNum) || num.buttonNum == bombNumbers[num.buttonNum]}
-                    <button class="bg-red-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 💣 </button>
+                    <button class="red-custom w-16 h-16 max-sm:w-8 max-sm:h-8"> 💣 </button>
                 {:else if num.buttonClicked}
-                    <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                    <button class="blue-custom text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
                         on:click={() => handleClick(num)}> 
-                        {num.borderBombs}
+                        <p class="text-custom">{num.borderBombs}</p>
                     </button>
                 {:else}
-                    <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 
+                    <button class="red-custom w-16 h-16 max-sm:w-8 max-sm:h-8"> 
                     </button>
                 {/if}
             {:else if num.buttonClicked}
-                <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                <button class="blue-custom text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
                     on:click={() => handleClick(num)}> 
-                    {num.borderBombs}
+                    <p class="text-custom">{num.borderBombs}</p>
                 </button>
             {:else}
-                <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                <button class="red-custom w-16 h-16 max-sm:w-8 max-sm:h-8"
                     on:click={() => handleClick(num)}> 
                 </button>
             {/if}
         {/each}
     </div>
 </div>
+
+<button class="red-custom">
+    Dark Mode
+</button>
 
 {#if bombClicked}
     <p class="message-overlay">You Lost</p>
@@ -337,6 +350,55 @@
 <h1>​</h1>
 
 <style>
+    :root {
+        color-scheme: light dark lightbluetheme;
+    }
+
+    @media(prefers-color-scheme: light) {
+        .white-custom {
+            background-color: #FFFDEC
+        }
+        .red-custom {
+            background-color: #FFA500
+        }
+        .blue-custom {
+            background-color: #080F63
+        }
+        .text-custom {
+            background-color: #0015ff
+        }
+    }
+
+    @media(prefers-color-scheme: dark) {
+        .white-custom {
+            background-color: #0B4971
+        }
+        .red-custom {
+            background-color: #E2AB00
+        }
+        .blue-custom {
+            background-color: #1C9E34
+        }
+        .text-custom {
+            background-color: #191335
+        }
+    }
+
+    @media(prefers-color-scheme: lightbluetheme) {
+        .white-custom {
+            background-color:#00E4FF
+        }
+        .red-custom {
+            background-color:#006CFF
+        }
+        .blue-custom {
+            background-color:#080F63
+        }
+        .text-custom {
+            background-color:#6cc9ff
+        }
+    }
+
     .message-overlay {
         position: fixed;
         top: 0;
