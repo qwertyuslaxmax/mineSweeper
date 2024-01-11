@@ -46,6 +46,7 @@
         }
         
     }
+
     let gridButtons: Button[] = [];
 
     for (let i = 0; i < 64; i++) {
@@ -69,15 +70,6 @@
 
         return randomNumbers;
     }
-
-    let root = document.querySelector(":root");
-    let button = document.querySelector("button");
-
-    button.addEventListener('click', () => {
-      event.preventDefault();
-      root.classList.toggle('dark');
-    })
-
 
     let bombNumbers = getRandomNumbers();
     
@@ -279,13 +271,34 @@
     function replay() {
         for(let i: number = 0; i < gridButtons.length; i++) {
             gridButtons[i] = new Button(i);
-            bombNumbers = getRandomNumbers();
             disabledButtons = [];
             bombClicked = false;
             buttonsClicked = 0;
             gameWon = false;
         }
+        bombNumbers = getRandomNumbers();
     }
+    import { onMount } from 'svelte';
+
+let theme: string = 'light-theme';
+function changeTheme(selectedTheme: string) {
+  theme = selectedTheme;
+}
+
+ $: {
+  //document.documentElement.classList.remove('light-theme', 'dark-theme', 'blue-theme');
+  //document.documentElement.classList.add(theme);
+} 
+
+
+onMount(() => {
+  const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark-theme'
+    : 'light-theme';
+    
+  changeTheme(preferredTheme);
+}); 
+
 </script>
 
 <h1>​</h1>
@@ -300,7 +313,7 @@
                 {#if bombNumbers.includes(num.buttonNum) || num.buttonNum == bombNumbers[num.buttonNum]}
                     <button class="red-custom w-16 h-16 max-sm:w-8 max-sm:h-8"> 💣 </button>
                 {:else if num.buttonClicked}
-                    <button class="blue-custom text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                    <button class="blue-custom w-16 h-16 max-sm:w-8 max-sm:h-8"
                         on:click={() => handleClick(num)}> 
                         <p class="text-custom">{num.borderBombs}</p>
                     </button>
@@ -309,7 +322,7 @@
                     </button>
                 {/if}
             {:else if num.buttonClicked}
-                <button class="blue-custom text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                <button class="blue-custom w-16 h-16 max-sm:w-8 max-sm:h-8"
                     on:click={() => handleClick(num)}> 
                     <p class="text-custom">{num.borderBombs}</p>
                 </button>
@@ -322,9 +335,7 @@
     </div>
 </div>
 
-<button class="red-custom">
-    Dark Mode
-</button>
+<button class="red-custom" on:click={() => changeTheme('dark-theme')}>Dark Mode</button>
 
 {#if bombClicked}
     <p class="message-overlay">You Lost</p>
@@ -356,32 +367,31 @@
 
     @media(prefers-color-scheme: light) {
         .white-custom {
-            background-color: #FFFDEC
+            background-color: #FFFDEC;
         }
         .red-custom {
-            background-color: #FFA500
+            background-color: #FFA500;
+            color: #0015ff
         }
         .blue-custom {
-            background-color: #080F63
-        }
-        .text-custom {
-            background-color: #0015ff
+            background-color: #080F63;
+            color: #0015ff
         }
     }
 
     @media(prefers-color-scheme: dark) {
         .white-custom {
-            background-color: #0B4971
+            background-color: #0B4971;
         }
         .red-custom {
-            background-color: #E2AB00
+            background-color: #E2AB00;
+            color: #191335
         }
         .blue-custom {
-            background-color: #1C9E34
+            background-color: #1C9E34;
+            color: #191335
         }
-        .text-custom {
-            background-color: #191335
-        }
+            
     }
 
     @media(prefers-color-scheme: lightbluetheme) {
