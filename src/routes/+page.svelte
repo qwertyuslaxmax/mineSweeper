@@ -1,6 +1,8 @@
 <script lang="ts">
     
     let mode: number;
+    let wins = 0;
+    let losses = 0;
     let gameBegin: boolean = true;
 
     function cakeWalk(){
@@ -46,7 +48,6 @@
         }
         
     }
-
     let gridButtons: Button[] = [];
 
     for (let i = 0; i < 64; i++) {
@@ -70,9 +71,8 @@
 
         return randomNumbers;
     }
-
     let bombNumbers = getRandomNumbers();
-    
+    let shield = false;
     let disabledButtons: number[] = [];
 
     function handleClick(button: Button) {
@@ -81,13 +81,31 @@
             let nothing = 1;
         } else {
                 if (bombNumbers.includes(button.buttonNum)) {
-                    bombClicked = true;
-                    disabledButtons = bombNumbers.slice();
-                    throw "exit";
+                    if(buttonsClicked <= 3){
+                        disabledButtons = bombNumbers.slice();
+                        shield = true;
+                        setTimeout(() => {let nothing = 1}, 1000);
+                        shield = false;
+                        replay();
+                    } else {
+                        bombClicked = true;
+                        disabledButtons = bombNumbers.slice();
+                        losses ++;
+                        throw "exit";
+                    }
                 }
                 buttonsClicked++
                 if(buttonsClicked == 64-mode){
-                    gameWon = true;
+                    wins++;
+                    if(wins + losses >= 8){
+                        if(losses*2 < wins){
+                            gameBeaten();
+                        } else {
+                            gameWon = true;
+                        }
+                    } else {
+                        gameWon = true;
+                    }
                 }
                 disabledButtons.push(button.buttonNum);
                 switch (button.buttonNum) {
@@ -267,84 +285,118 @@
             }
         }
     }
-    
+    let gameBeat1 = false;
+    let gameBeat2 = false;
+    let gameBeat3 = false;
+    let gameBeat4 = false;
+    let gameBeat5 = false;
+    function gameBeaten() {
+        switch(mode){
+            case 5:
+                gameBeat1 = true;
+                break;
+            case 8:
+                gameBeat2 = true;
+                break;
+            case 12:
+                gameBeat3 = true;
+                break;
+            case 18:
+                gameBeat4 = true;
+                break;
+            case 25:
+                gameBeat5 = true;
+                break;
+        }
+    }
+    function changeDifficulty() {
+        gameBegin = true;
+        gameBeat1 = false;
+        gameBeat2 = false;
+        gameBeat3 = false;
+        gameBeat4 = false;
+        gameBeat5 = false;
+        losses = 0;
+        wins = 0;
+    }
     function replay() {
         for(let i: number = 0; i < gridButtons.length; i++) {
             gridButtons[i] = new Button(i);
+        }
+        bombNumbers = getRandomNumbers();
             disabledButtons = [];
             bombClicked = false;
             buttonsClicked = 0;
             gameWon = false;
-        }
-        bombNumbers = getRandomNumbers();
     }
-    import { onMount } from 'svelte';
-
-let theme: string = 'light-theme';
-function changeTheme(selectedTheme: string) {
-  theme = selectedTheme;
-}
-
- $: {
-  //document.documentElement.classList.remove('light-theme', 'dark-theme', 'blue-theme');
-  //document.documentElement.classList.add(theme);
-} 
-
-
-onMount(() => {
-  const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark-theme'
-    : 'light-theme';
-    
-  changeTheme(preferredTheme);
-}); 
-
 </script>
 
 <h1>​</h1>
+<h1 class="flex justify-center align-items: center text-blue-600">Win Loss Ratio</h1>
+<h1 class="flex justify-center align-items: center text-blue-600"> {wins}:{losses} </h1>
 <h1>​</h1>
-<h1>​</h1>
-<h1>​</h1>
-
-<div class="flex justify-center align-items: center white-custom">
+<div class="flex justify-center align-items: center">
     <div class="grid grid-cols-8 gap-2 w-fit">
         {#each gridButtons as num}
             {#if bombClicked || gameWon}
                 {#if bombNumbers.includes(num.buttonNum) || num.buttonNum == bombNumbers[num.buttonNum]}
-                    <button class="red-custom w-16 h-16 max-sm:w-8 max-sm:h-8"> 💣 </button>
+                    <button class="bg-red-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 💣 </button>
                 {:else if num.buttonClicked}
-                    <button class="blue-custom w-16 h-16 max-sm:w-8 max-sm:h-8"
+                    <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
                         on:click={() => handleClick(num)}> 
-                        <p class="text-custom">{num.borderBombs}</p>
+                        {num.borderBombs}
                     </button>
                 {:else}
-                    <button class="red-custom w-16 h-16 max-sm:w-8 max-sm:h-8"> 
+                    <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 
                     </button>
                 {/if}
             {:else if num.buttonClicked}
-                <button class="blue-custom w-16 h-16 max-sm:w-8 max-sm:h-8"
+                <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
                     on:click={() => handleClick(num)}> 
-                    <p class="text-custom">{num.borderBombs}</p>
+                    {num.borderBombs}
                 </button>
             {:else}
-                <button class="red-custom w-16 h-16 max-sm:w-8 max-sm:h-8"
+                <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"
                     on:click={() => handleClick(num)}> 
                 </button>
             {/if}
         {/each}
     </div>
 </div>
-
-<button class="red-custom" on:click={() => changeTheme('dark-theme')}>Dark Mode</button>
-
+<h1>​</h1>
+<button class = "moretop2" on:click={() => changeDifficulty()}>Change Difficulty</button>
 {#if bombClicked}
     <p class="message-overlay">You Lost</p>
     <button class="messageButton" on:click={replay}>Retry</button>
 {/if}
 
+{#if shield == true}
+    <p class="message-overlay-shield">🛡️ shield</p>
+{/if}
+
 {#if gameWon}
     <p class="message-overlayWin">You Won</p>
-    <button class="messageButton" on:click={replay}>Replay</button>
+    <button class="messageButton" on:click={replay}>Continue Playing(you have not beaten the game yet)</button>
+{/if}
+
+{#if gameBeat1}
+    <p class="message-overlayWin">You Beat the Game in Cakewalk(no exclamation points)</p>
+{/if}
+
+{#if gameBeat2}
+    <p class="message-overlayWin">You Beat the Game in Easy. wee</p>
+{/if}
+
+{#if gameBeat3}
+    <p class="message-overlayWin">You Beat the Game in Normal!</p>
+{/if}
+
+{#if gameBeat4}
+    <p class="message-overlayWin">You Beat the Game in Hard!!!!!!</p>
+{/if}
+
+{#if gameBeat5}
+    <p class="message-overlayWin">You Beat the Game in Very Hard!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
 {/if}
 
 {#if gameBegin}
@@ -361,54 +413,6 @@ onMount(() => {
 <h1>​</h1>
 
 <style>
-    :root {
-        color-scheme: light dark lightbluetheme;
-    }
-
-    @media(prefers-color-scheme: light) {
-        .white-custom {
-            background-color: #FFFDEC;
-        }
-        .red-custom {
-            background-color: #FFA500;
-            color: #0015ff
-        }
-        .blue-custom {
-            background-color: #080F63;
-            color: #0015ff
-        }
-    }
-
-    @media(prefers-color-scheme: dark) {
-        .white-custom {
-            background-color: #0B4971;
-        }
-        .red-custom {
-            background-color: #E2AB00;
-            color: #191335
-        }
-        .blue-custom {
-            background-color: #1C9E34;
-            color: #191335
-        }
-            
-    }
-
-    @media(prefers-color-scheme: lightbluetheme) {
-        .white-custom {
-            background-color:#00E4FF
-        }
-        .red-custom {
-            background-color:#006CFF
-        }
-        .blue-custom {
-            background-color:#080F63
-        }
-        .text-custom {
-            background-color:#6cc9ff
-        }
-    }
-
     .message-overlay {
         position: fixed;
         top: 0;
@@ -423,14 +427,28 @@ onMount(() => {
         font-size: 3rem;
         z-index: 998;
     }
-    .message-overlayWin {
-        opacity: 0.6;
+    .message-overlay-shield {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: aliceblue;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        z-index: 999;
+        font-size: 6rem;
+    }
+    .message-overlayWin {
+        opacity: 0.8;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgb(20, 7, 196);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -439,6 +457,7 @@ onMount(() => {
         z-index: 998;
     }
     .messageButton {
+        opacity: 1;
         position: fixed;
         bottom: 0;
         left: 0;
@@ -461,6 +480,20 @@ onMount(() => {
         height: 20%;
         background: aliceblue;
         display: block;
+        justify-content: center;
+        align-items: center;
+        color: blue;
+        font-size: 1.5rem;
+        z-index: 999;
+    }
+    .moretop2 {
+        position: fixed;
+        bottom: 10%;
+        left: 25%;
+        width: 50%;
+        height: 10%;
+        display: block;
+        background-color: bisque;
         justify-content: center;
         align-items: center;
         color: blue;
