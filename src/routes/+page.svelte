@@ -487,7 +487,7 @@
         z-index: 999;
     }
     .moretop2 {
-        position: fixed;
+        position:relative;
         bottom: 10%;
         left: 25%;
         width: 50%;
