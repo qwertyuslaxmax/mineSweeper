@@ -72,7 +72,6 @@
         return randomNumbers;
     }
     let bombNumbers = getRandomNumbers();
-    let shield = false;
     let disabledButtons: number[] = [];
 
     function handleClick(button: Button) {
@@ -80,20 +79,19 @@
         if(disabledButtons.includes(button.buttonNum)){
             let nothing = 1;
         } else {
-                if (bombNumbers.includes(button.buttonNum)) {
-                    if(buttonsClicked <= 3){
-                        disabledButtons = bombNumbers.slice();
-                        shield = true;
-                        setTimeout(() => {let nothing = 1}, 1000);
-                        shield = false;
-                        replay();
-                    } else {
-                        bombClicked = true;
-                        disabledButtons = bombNumbers.slice();
-                        losses ++;
-                        throw "exit";
-                    }
+            if (bombNumbers.includes(button.buttonNum)) {
+                if (buttonsClicked <= 3) {
+                    disabledButtons = bombNumbers.slice();
+                    replay();
+                    bombNumbers = getRandomNumbers();  // Update bombNumbers after replay
+                    return;  // Exit the function to avoid further processing
+                } else {
+                    bombClicked = true;
+                    disabledButtons = bombNumbers.slice();
+                    losses++;
+                    throw "exit";
                 }
+            }
                 buttonsClicked++
                 if(buttonsClicked == 64-mode){
                     wins++;
@@ -320,10 +318,10 @@
         wins = 0;
     }
     function replay() {
+        bombNumbers = getRandomNumbers();
         for(let i: number = 0; i < gridButtons.length; i++) {
             gridButtons[i] = new Button(i);
         }
-        bombNumbers = getRandomNumbers();
             disabledButtons = [];
             bombClicked = false;
             buttonsClicked = 0;
@@ -368,10 +366,6 @@
 {#if bombClicked}
     <p class="message-overlay">You Lost</p>
     <button class="messageButton" on:click={replay}>Retry</button>
-{/if}
-
-{#if shield == true}
-    <p class="message-overlay-shield">🛡️ shield</p>
 {/if}
 
 {#if gameWon}
@@ -426,20 +420,6 @@
         color: white;
         font-size: 3rem;
         z-index: 998;
-    }
-    .message-overlay-shield {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        z-index: 999;
-        font-size: 6rem;
     }
     .message-overlayWin {
         opacity: 0.8;
