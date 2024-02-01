@@ -328,17 +328,18 @@
             gameWon = false;
     }
 
-    let themes: string[] = ["original-theme", "lightBlue-theme", "dark-theme"];
+    let themes: string[] = ["original-theme", "lightBlue-theme"];
     let theme: string = "original-theme";
     let unclicked: string = "original-unclicked";
     let clicked: string = "original-clicked";
     let bomb: string = "original-bomb";
     let background: string = "background-theme-original";
+    let buttons: string = "button-original";
     let currentIndex = 0;
 
     function changeTheme(){
-        currentIndex = (currentIndex +1);
-        if(currentIndex == 4){
+        currentIndex++;
+        if(currentIndex == 2){
             currentIndex = 0;
         }
         theme = themes[currentIndex];
@@ -351,16 +352,29 @@
                 clicked = "original-clicked"
                 bomb = "original-bomb"
                 background = "background-theme-original"
+                buttons = "button-original"
+                break;
             case "lightBlue-theme":
                 unclicked = "lightBlue-unclicked"
                 clicked = "lightBlue-clicked"
                 bomb = "lightBlue-bomb"
                 background = "background-theme-lightBlue"
+                buttons = "button-lightBlue"
+                break;
             case "dark-theme":
                 unclicked = "dark-unclicked"
                 clicked = "dark-clicked"
                 bomb = "dark-bomb"
                 background = "background-theme-dark"
+                buttons = "button-dark"
+                break;
+            case "blueTheme":
+                unclicked = "blue-unclicked"
+                clicked = "blue-clicked"
+                bomb = "blue-bomb"
+                background = "background-theme-blue"
+                buttons = "button-blue"
+                break;
         }
     }
 </script>
@@ -374,7 +388,7 @@
             {#each gridButtons as num}
                 {#if bombClicked || gameWon}
                     {#if bombNumbers.includes(num.buttonNum) || num.buttonNum == bombNumbers[num.buttonNum]}
-                        <button class="{theme} {unclicked}"> 💣 </button>
+                        <button class="{theme} {bomb}"> 💣 </button>
                     {:else if num.buttonClicked}
                         <button class="{theme} {clicked}"
                             on:click={() => handleClick(num)}> 
@@ -400,9 +414,9 @@
     <h1>​</h1>
 
 
-    <button class = "moretop2" on:click={() => changeDifficulty()}>Change Difficulty</button>
-
-    <button class = "moretop2" on:click={() => changeTheme()}>Change Theme</button>
+    <button class = "moretop2 {buttons} " on:click={() => changeDifficulty()}>Change Difficulty</button>
+    <p class="{background}">i</p>
+    <button class = "moretop2 {buttons} " on:click={() => changeTheme()}>Change Theme</button>
 
     {#if bombClicked}
         <p class="message-overlay">You Lost</p>
@@ -448,6 +462,9 @@
     <h1>​</h1>
 </div>
 <style>
+    .original-buttons {
+        background-color: chocolate;
+    }
     .background-theme-original {
         background-color: antiquewhite;
     }
@@ -456,7 +473,7 @@
         height: 16;
         max-width: 8;
         max-height: 8;
-        border-width: 1px;
+        border-width: 0px;
         border-color: blue;
     }
     .original-unclicked {
@@ -473,7 +490,7 @@
         background-color: antiquewhite;
     }
     .background-theme-blue {
-        background-color: lightblue;
+        background-color: rgb(95, 183, 212);
     }
     .lightBlue-theme {
         width: 16;
@@ -481,7 +498,7 @@
         max-width: 8;
         max-height: 8;
         border-width: 1px;
-        border-color: blue;
+        border-color: rgb(255, 238, 0);
     }
     .lightBlue-unclicked {
         background-color: rgb(7, 162, 205);
@@ -513,6 +530,27 @@
     }
     .dark-bomb {
         background-color: rgb(255, 82, 82);
+    }
+    .background-theme-blue {
+        background-color: rgb(71, 147, 255);
+    }
+    .blue-theme {
+        width: 16;
+        height: 16;
+        max-width: 8;
+        max-height: 8;
+        border-width: 1px;
+        border-color: rgb(0, 0, 124);
+    }
+    .blue-unclicked {
+        background-color: rgb(0, 234, 255);
+    }
+    .blue-clicked {
+        background-color: rgb(86, 249, 255);
+        color: rgb(0, 4, 105)
+    }
+    .blue-bomb {
+        background-color: rgb(0, 137, 84);
     }
     .message-overlay {
         position: fixed;
