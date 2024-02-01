@@ -327,86 +327,193 @@
             buttonsClicked = 0;
             gameWon = false;
     }
-</script>
 
-<h1>​</h1>
-<h1 class="flex justify-center align-items: center text-blue-600">Win Loss Ratio</h1>
-<h1 class="flex justify-center align-items: center text-blue-600"> {wins}:{losses} </h1>
-<h1>​</h1>
-<div class="flex justify-center align-items: center">
-    <div class="grid grid-cols-8 gap-2 w-fit">
-        {#each gridButtons as num}
-            {#if bombClicked || gameWon}
-                {#if bombNumbers.includes(num.buttonNum) || num.buttonNum == bombNumbers[num.buttonNum]}
-                    <button class="bg-red-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 💣 </button>
+    let themes: string[] = ["original-theme", "lightBlue-theme", "dark-theme"];
+    let theme: string = "original-theme";
+    let unclicked: string = "original-unclicked";
+    let clicked: string = "original-clicked";
+    let bomb: string = "original-bomb";
+    let background: string = "background-theme-original";
+    let currentIndex = 0;
+
+    function changeTheme(){
+        currentIndex = (currentIndex +1);
+        if(currentIndex == 4){
+            currentIndex = 0;
+        }
+        theme = themes[currentIndex];
+        sideTheme();
+    }
+    function sideTheme(){
+        switch(theme){
+            case "original-theme":
+                unclicked = "original-unclicked"
+                clicked = "original-clicked"
+                bomb = "original-bomb"
+                background = "background-theme-original"
+            case "lightBlue-theme":
+                unclicked = "lightBlue-unclicked"
+                clicked = "lightBlue-clicked"
+                bomb = "lightBlue-bomb"
+                background = "background-theme-lightBlue"
+            case "dark-theme":
+                unclicked = "dark-unclicked"
+                clicked = "dark-clicked"
+                bomb = "dark-bomb"
+                background = "background-theme-dark"
+        }
+    }
+</script>
+<div class="{background}"> 
+    <h1>​</h1>
+    <h1 class="flex justify-center align-items: center text-blue-600">Win Loss Ratio</h1>
+    <h1 class="flex justify-center align-items: center text-blue-600"> {wins}:{losses} </h1>
+    <h1>​</h1>
+    <div class="flex justify-center align-items: center">
+        <div class="grid grid-cols-8 gap-2 w-fit">
+            {#each gridButtons as num}
+                {#if bombClicked || gameWon}
+                    {#if bombNumbers.includes(num.buttonNum) || num.buttonNum == bombNumbers[num.buttonNum]}
+                        <button class="{theme} {unclicked}"> 💣 </button>
+                    {:else if num.buttonClicked}
+                        <button class="{theme} {clicked}"
+                            on:click={() => handleClick(num)}> 
+                            {num.borderBombs}
+                        </button>
+                    {:else}
+                        <button class="{theme} {unclicked}"> 
+                        </button>
+                    {/if}
                 {:else if num.buttonClicked}
-                    <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
+                    <button class="{theme} {clicked} w-16 h-16 max-sm:w-8 max-sm:h-8"
                         on:click={() => handleClick(num)}> 
                         {num.borderBombs}
                     </button>
                 {:else}
-                    <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"> 
+                    <button class="{theme} {unclicked} w-16 h-16 max-sm:w-8 max-sm:h-8"
+                        on:click={() => handleClick(num)}> 
                     </button>
                 {/if}
-            {:else if num.buttonClicked}
-                <button class="bg-slate-900 text-blue-600 w-16 h-16 max-sm:w-8 max-sm:h-8"
-                    on:click={() => handleClick(num)}> 
-                    {num.borderBombs}
-                </button>
-            {:else}
-                <button class="bg-orange-500 w-16 h-16 max-sm:w-8 max-sm:h-8"
-                    on:click={() => handleClick(num)}> 
-                </button>
-            {/if}
-        {/each}
+            {/each}
+        </div>
     </div>
+    <h1>​</h1>
+
+
+    <button class = "moretop2" on:click={() => changeDifficulty()}>Change Difficulty</button>
+
+    <button class = "moretop2" on:click={() => changeTheme()}>Change Theme</button>
+
+    {#if bombClicked}
+        <p class="message-overlay">You Lost</p>
+        <button class="messageButton" on:click={replay}>Retry</button>
+    {/if}
+
+    {#if gameWon}
+        <p class="message-overlayWin">You Won</p>
+        <button class="messageButton" on:click={replay}>Continue Playing(you have not beaten the game yet)</button>
+    {/if}
+
+    {#if gameBeat1}
+        <p class="message-overlayWin">You Beat the Game in Cakewalk(no exclamation points)</p>
+    {/if}
+
+    {#if gameBeat2}
+        <p class="message-overlayWin">You Beat the Game in Easy. wee</p>
+    {/if}
+
+    {#if gameBeat3}
+        <p class="message-overlayWin">You Beat the Game in Normal!</p>
+    {/if}
+
+    {#if gameBeat4}
+        <p class="message-overlayWin">You Beat the Game in Hard!!!!!!</p>
+    {/if}
+
+    {#if gameBeat5}
+        <p class="message-overlayWin">You Beat the Game in Very Hard!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+    {/if}
+
+    {#if gameBegin}
+        <button class="moretop" on:click={cakeWalk}>Cakewalk</button>
+        <button class="top" on:click={easy}>Easy</button>
+        <button class="upMid" on:click={normal}>Normal</button>
+        <button class="downMid" on:click={hard}>Hard</button>
+        <button class="bottom" on:click={veryHard}>Very Hard</button>
+    {/if}
+
+    <h1>​</h1>
+    <h1>​</h1>
+    <h1>​</h1>
+    <h1>​</h1>
 </div>
-<h1>​</h1>
-<button class = "moretop2" on:click={() => changeDifficulty()}>Change Difficulty</button>
-{#if bombClicked}
-    <p class="message-overlay">You Lost</p>
-    <button class="messageButton" on:click={replay}>Retry</button>
-{/if}
-
-{#if gameWon}
-    <p class="message-overlayWin">You Won</p>
-    <button class="messageButton" on:click={replay}>Continue Playing(you have not beaten the game yet)</button>
-{/if}
-
-{#if gameBeat1}
-    <p class="message-overlayWin">You Beat the Game in Cakewalk(no exclamation points)</p>
-{/if}
-
-{#if gameBeat2}
-    <p class="message-overlayWin">You Beat the Game in Easy. wee</p>
-{/if}
-
-{#if gameBeat3}
-    <p class="message-overlayWin">You Beat the Game in Normal!</p>
-{/if}
-
-{#if gameBeat4}
-    <p class="message-overlayWin">You Beat the Game in Hard!!!!!!</p>
-{/if}
-
-{#if gameBeat5}
-    <p class="message-overlayWin">You Beat the Game in Very Hard!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
-{/if}
-
-{#if gameBegin}
-    <button class="moretop" on:click={cakeWalk}>Cakewalk</button>
-    <button class="top" on:click={easy}>Easy</button>
-    <button class="upMid" on:click={normal}>Normal</button>
-    <button class="downMid" on:click={hard}>Hard</button>
-    <button class="bottom" on:click={veryHard}>Very Hard</button>
-{/if}
-
-<h1>​</h1>
-<h1>​</h1>
-<h1>​</h1>
-<h1>​</h1>
-
 <style>
+    .background-theme-original {
+        background-color: antiquewhite;
+    }
+    .original-theme {
+        width: 16;
+        height: 16;
+        max-width: 8;
+        max-height: 8;
+        border-width: 1px;
+        border-color: blue;
+    }
+    .original-unclicked {
+        background-color: rgb(255, 149, 0);
+    }
+    .original-clicked {
+        background-color: rgb(38, 52, 74);
+        color: rgb(21, 68, 255)
+    }
+    .original-bomb {
+        background-color: red;
+    }
+    .background-theme-original {
+        background-color: antiquewhite;
+    }
+    .background-theme-blue {
+        background-color: lightblue;
+    }
+    .lightBlue-theme {
+        width: 16;
+        height: 16;
+        max-width: 8;
+        max-height: 8;
+        border-width: 1px;
+        border-color: blue;
+    }
+    .lightBlue-unclicked {
+        background-color: rgb(7, 162, 205);
+    }
+    .lightBlue-clicked {
+        background-color: rgb(11, 2, 116);
+        color: rgb(0, 234, 102)
+    }
+    .lightBlue-bomb {
+        background-color: rgb(146, 9, 80);
+    }
+    .background-theme-dark {
+        background-color: rgb(0, 63, 83);
+    }
+    .dark-theme {
+        width: 16;
+        height: 16;
+        max-width: 8;
+        max-height: 8;
+        border-width: 1px;
+        border-color: rgb(2, 2, 34);
+    }
+    .dark-unclicked {
+        background-color: rgb(0, 234, 255);
+    }
+    .dark-clicked {
+        background-color: rgb(255, 234, 0);
+        color: rgb(0, 0, 0)
+    }
+    .dark-bomb {
+        background-color: rgb(255, 82, 82);
+    }
     .message-overlay {
         position: fixed;
         top: 0;
