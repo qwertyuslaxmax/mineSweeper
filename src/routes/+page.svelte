@@ -328,7 +328,7 @@
             gameWon = false;
     }
 
-    let themes: string[] = ["original-theme", "lightBlue-theme"];
+    let themes: string[] = ["original-theme", "lightBlue-theme", "dark-theme", "blue-theme"];
     let theme: string = "original-theme";
     let unclicked: string = "original-unclicked";
     let clicked: string = "original-clicked";
@@ -339,7 +339,7 @@
 
     function changeTheme(){
         currentIndex++;
-        if(currentIndex == 2){
+        if(currentIndex == 4){
             currentIndex = 0;
         }
         theme = themes[currentIndex];
@@ -368,7 +368,7 @@
                 background = "background-theme-dark"
                 buttons = "button-dark"
                 break;
-            case "blueTheme":
+            case "blue-theme":
                 unclicked = "blue-unclicked"
                 clicked = "blue-clicked"
                 bomb = "blue-bomb"
@@ -462,8 +462,9 @@
     <h1>​</h1>
 </div>
 <style>
-    .original-buttons {
+    .button-original {
         background-color: chocolate;
+        color:rgb(146, 9, 80);
     }
     .background-theme-original {
         background-color: antiquewhite;
@@ -486,11 +487,12 @@
     .original-bomb {
         background-color: red;
     }
-    .background-theme-original {
-        background-color: antiquewhite;
+    .button-lightBlue {
+        background-color: rgb(31, 11, 142);
+        color: yellowgreen;
     }
-    .background-theme-blue {
-        background-color: rgb(95, 183, 212);
+    .background-theme-lightBlue {
+        background-color:rgb(142, 187, 201);
     }
     .lightBlue-theme {
         width: 16;
@@ -509,6 +511,10 @@
     }
     .lightBlue-bomb {
         background-color: rgb(146, 9, 80);
+    }
+    .button-dark {
+        background-color: rgb(170, 136, 14);
+        color: rgb(82, 18, 12);
     }
     .background-theme-dark {
         background-color: rgb(0, 63, 83);
@@ -531,6 +537,10 @@
     .dark-bomb {
         background-color: rgb(255, 82, 82);
     }
+    .button-blue {
+        background-color: rgb(36, 83, 152);
+        color: yellowgreen;
+    }
     .background-theme-blue {
         background-color: rgb(71, 147, 255);
     }
@@ -543,7 +553,7 @@
         border-color: rgb(0, 0, 124);
     }
     .blue-unclicked {
-        background-color: rgb(0, 234, 255);
+        background-color: rgb(104, 111, 207);
     }
     .blue-clicked {
         background-color: rgb(86, 249, 255);
@@ -618,10 +628,8 @@
         width: 50%;
         height: 10%;
         display: block;
-        background-color: bisque;
         justify-content: center;
         align-items: center;
-        color: blue;
         font-size: 1.5rem;
         z-index: 999;
     }
