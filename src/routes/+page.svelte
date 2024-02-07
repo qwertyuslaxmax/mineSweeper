@@ -418,6 +418,12 @@
     <p class="{background}">i</p>
     <button class = "moretop2 {buttons} " on:click={() => changeTheme()}>Change Theme</button>
 
+    <p class="{background}">i</p>
+    <p class="{background}">i</p>
+    <p class="{background}">i</p>
+    <p class="{background}">i</p>
+
+
     {#if bombClicked}
         <p class="message-overlay">You Lost</p>
         <button class="messageButton" on:click={replay}>Retry</button>
@@ -482,7 +488,7 @@
     }
     .original-clicked {
         background-color: rgb(38, 52, 74);
-        color: rgb(21, 68, 255)
+        color: rgb(63, 101, 255)
     }
     .original-bomb {
         background-color: red;
