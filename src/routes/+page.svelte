@@ -1,6 +1,4 @@
 <script lang="ts">
-    
-    import tutorial from './tutorial.svelte';
 
     let mode: number;
     let wins = 0;
