@@ -216,7 +216,7 @@
 
     function qwertyuslaxmax(button: Button, x: number[]) {
         let borderTiles = x;
-        button.borderBombs = 0; // Reset borderBombs before updating
+        button.borderBombs = 0;
         for (var i = 0; i < borderTiles.length; i++) {
             if (bombNumbers.includes(borderTiles[i])) {
                 button.borderBombs = button.borderBombs + 1;
