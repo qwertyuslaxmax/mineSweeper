@@ -1,5 +1,7 @@
 <script lang="ts">
     
+    import tutorial from './tutorial.svelte';
+
     let mode: number;
     let wins = 0;
     let losses = 0;
@@ -40,14 +42,100 @@
         buttonNum: number;
         buttonClicked: boolean;
         borderBombs: number;
+        borderTiles: number[] = [];
 
         constructor(num: number){
             this.buttonNum=num;
             this.buttonClicked=false;
             this.borderBombs=0;
+            this.borderTiles=[];
         }
         
     }
+
+    function getBorderTiles(button: Button){
+        switch (button.buttonNum){
+            case 16:
+            case 8:
+            case 24:
+            case 32:
+            case 40:
+            case 48:
+                button.borderTiles.push(button.buttonNum + 1)
+                button.borderTiles.push(button.buttonNum - 8)
+                button.borderTiles.push(button.buttonNum + 8)
+                button.borderTiles.push(button.buttonNum + 9)
+                button.borderTiles.push(button.buttonNum - 7)
+                break;
+            case 6:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                button.borderTiles.push(button.buttonNum + 1)
+                button.borderTiles.push(button.buttonNum - 1)
+                button.borderTiles.push(button.buttonNum + 8)
+                button.borderTiles.push(button.buttonNum + 9)
+                button.borderTiles.push(button.buttonNum + 7)
+                break;
+            case 57:
+            case 58:
+            case 59:
+            case 60:
+            case 61:
+            case 62:
+                button.borderTiles.push(button.buttonNum + 1)
+                button.borderTiles.push(button.buttonNum - 1)
+                button.borderTiles.push(button.buttonNum - 8)
+                button.borderTiles.push(button.buttonNum - 9)
+                button.borderTiles.push(button.buttonNum - 7)
+                break;
+            case 15:
+            case 23:
+            case 31:
+            case 39:
+            case 47:
+            case 55:
+                button.borderTiles.push(button.buttonNum - 1)
+                button.borderTiles.push(button.buttonNum - 8)
+                button.borderTiles.push(button.buttonNum + 8)
+                button.borderTiles.push(button.buttonNum - 9)
+                button.borderTiles.push(button.buttonNum + 7)
+                break;
+            case 0:
+                button.borderTiles.push(button.buttonNum + 1)
+                button.borderTiles.push(button.buttonNum + 8)
+                button.borderTiles.push(button.buttonNum + 9)
+                break;
+            case 7:
+                button.borderTiles.push(button.buttonNum - 1)
+                button.borderTiles.push(button.buttonNum + 8)
+                button.borderTiles.push(button.buttonNum + 7)
+                break;
+            case 56:
+                button.borderTiles.push(button.buttonNum + 1)
+                button.borderTiles.push(button.buttonNum - 8)
+                button.borderTiles.push(button.buttonNum - 7)
+                break;
+            case 63:
+                button.borderTiles.push(button.buttonNum - 1)
+                button.borderTiles.push(button.buttonNum - 8)
+                button.borderTiles.push(button.buttonNum - 9)
+                break;
+            default:
+                button.borderTiles.push(button.buttonNum - 1)
+                button.borderTiles.push(button.buttonNum + 1)
+                button.borderTiles.push(button.buttonNum - 9)
+                button.borderTiles.push(button.buttonNum + 9)
+                button.borderTiles.push(button.buttonNum - 8)
+                button.borderTiles.push(button.buttonNum + 8)
+                button.borderTiles.push(button.buttonNum - 7)
+                button.borderTiles.push(button.buttonNum + 7)
+        }
+        return button.borderTiles;
+    }
+
     let gridButtons: Button[] = [];
 
     for (let i = 0; i < 64; i++) {
@@ -76,10 +164,12 @@
 
     function handleClick(button: Button) {
         gridButtons[button.buttonNum].buttonClicked = true;
-        if(disabledButtons.includes(button.buttonNum)){
-            let nothing = 1;
+
+        if (disabledButtons.includes(button.buttonNum)) {
+            return;  // If button is disabled, do nothing
         } else {
             if (bombNumbers.includes(button.buttonNum)) {
+                // If button is a bomb, handle loss
                 if (buttonsClicked <= 3) {
                     disabledButtons = bombNumbers.slice();
                     replay();
@@ -89,200 +179,51 @@
                     bombClicked = true;
                     disabledButtons = bombNumbers.slice();
                     losses++;
-                    throw "exit";
+                    throw "exit";  // Throw an error to exit the function
                 }
             }
-                buttonsClicked++
-                if(buttonsClicked == 64-mode){
-                    wins++;
-                    if(wins + losses >= 8){
-                        if(losses*2 < wins){
-                            gameBeaten();
-                        } else {
-                            gameWon = true;
-                        }
+
+            buttonsClicked++;
+
+            let borderTiles = getBorderTiles(button)
+
+            for (var i = 0; i < borderTiles.length; i++) {
+                if (bombNumbers.includes(borderTiles[i])) {
+                    button.borderBombs = button.borderBombs + 1;
+                }
+            }
+
+
+            if (buttonsClicked == 64 - mode) {
+                wins++;
+                if (wins + losses >= 8) {
+                    if (losses * 2 < wins) {
+                        gameBeaten();
                     } else {
                         gameWon = true;
                     }
+                } else {
+                    gameWon = true;
                 }
-                disabledButtons.push(button.buttonNum);
-                switch (button.buttonNum) {
-                    case 16:
-                    case 8:
-                    case 24:
-                    case 32:
-                    case 40:
-                    case 48:
-
-                        if(bombNumbers.includes(button.buttonNum+1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+9)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-7)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
+            }
             
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
+            disabledButtons.push(button.buttonNum);
+            
+            qwertyuslaxmax(button, borderTiles);
 
-                        if(bombNumbers.includes(button.buttonNum-1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+9)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+7)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
-                
-                    case 57:
-                    case 58:
-                    case 59:
-                    case 60:
-                    case 61:
-                    case 62:
+        }
+    }
 
-                        if(bombNumbers.includes(button.buttonNum-1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-9)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-7)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
-
-                    case 15:
-                    case 23:
-                    case 31:
-                    case 39:
-                    case 47:
-                    case 55:
-
-                        if(bombNumbers.includes(button.buttonNum-1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-9)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+7)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
-
-                    case 0:
-
-                        if(bombNumbers.includes(1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(9)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
-                    case 7:
-
-                        if(bombNumbers.includes(6)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(15)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(14)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
-
-                    case 56:
-                
-                        if(bombNumbers.includes(49)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(48)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(57)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
-
-                    case 63:
-
-                        if(bombNumbers.includes(62)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(54)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(55)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
-
-                    default:
-                        if(bombNumbers.includes(button.buttonNum-1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+1)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+8)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-9)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+9)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum-7)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        if(bombNumbers.includes(button.buttonNum+7)){
-                            button.borderBombs = button.borderBombs + 1
-                        }
-                        break;
+    function qwertyuslaxmax(button: Button, x: number[]) {
+        let borderTiles = x;
+        button.borderBombs = 0; // Reset borderBombs before updating
+        for (var i = 0; i < borderTiles.length; i++) {
+            if (bombNumbers.includes(borderTiles[i])) {
+                button.borderBombs = button.borderBombs + 1;
             }
         }
     }
+
     let gameBeat1 = false;
     let gameBeat2 = false;
     let gameBeat3 = false;
@@ -378,6 +319,7 @@
         }
     }
 </script>
+
 <div class="{background}"> 
     <h1>​</h1>
     <h1 class="flex justify-center align-items: center text-blue-600">Win Loss Ratio</h1>

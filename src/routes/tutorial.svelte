@@ -36,11 +36,6 @@
             "If you uncover all of the tiles without bombs, you will have won the round",
             "Next, we will discuss details. If this is your first time playing, we recommend you get better without advancing (i.e. get a win in normal)",
         ],
-        [
-            "Welcome to Minesweeper! Click the buttons below to navigate the tutorial.",
-        ],
-
-
 
         [
             "How to beat the game",
