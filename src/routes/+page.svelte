@@ -166,20 +166,19 @@
         gridButtons[button.buttonNum].buttonClicked = true;
 
         if (disabledButtons.includes(button.buttonNum)) {
-            return;  // If button is disabled, do nothing
+            return;
         } else {
             if (bombNumbers.includes(button.buttonNum)) {
-                // If button is a bomb, handle loss
                 if (buttonsClicked <= 3) {
                     disabledButtons = bombNumbers.slice();
                     replay();
-                    bombNumbers = getRandomNumbers();  // Update bombNumbers after replay
-                    return;  // Exit the function to avoid further processing
+                    bombNumbers = getRandomNumbers();
+                    return;
                 } else {
                     bombClicked = true;
                     disabledButtons = bombNumbers.slice();
                     losses++;
-                    throw "exit";  // Throw an error to exit the function
+                    throw "exit";
                 }
             }
 
