@@ -398,7 +398,7 @@
         <button class="top" on:click={easy}>Easy</button>
         <button class="upMid" on:click={normal}>Normal</button>
         <button class="downMid" on:click={hard}>Hard</button>
-        <button class="bottom" on:click={veryHard}>Very Hard</button>
+        <button class="bottom" on:click={veryHard}>Afghanistan Simulator</button>
     {/if}
 
     <h1>​</h1>
