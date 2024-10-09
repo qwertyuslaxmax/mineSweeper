@@ -193,6 +193,9 @@
 
             if (buttonsClicked == 64 - mode) {
                 wins++;
+                if (mode == 25){
+                    gameWon = true;
+                }
                 if (wins + losses >= 8) {
                     if (losses * 2 < wins) {
                         gameBeaten();
@@ -390,7 +393,7 @@
     {/if}
 
     {#if gameBeat5}
-        <p class="message-overlayWin">You Beat the Game in Very Hard!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+        <p class="message-overlayWin">You are a true survivor... Even in dire situations like those in Afghanistan. Congratulations and hopefully your farm does not have 25 bombs in it next time.</p>
     {/if}
 
     {#if gameBegin}
